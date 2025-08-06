@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЦФО на карте</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="ol.js"></script>
+	<!--<script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"></script>-->
+</head>
+<body>
+
+    
+
+    <h1>Карта ЦФО</h1>
+    <div id="mapContainer">
+        <div id="map"></div>
+        <div id="zoom-info">Зум: 7</div>
+    </div>
+    <div id="info-container">
+        <p>Информация об объекте будет отображаться здесь.</p>
+        <div id="feature-details">
+        <!-- Детали объекта будут выводиться здесь -->
+    </div>
+
+    
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Создание карты
+
+            var landuseLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:landuse' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: true // Изначально открыт
+            });
+
+            var buildingsLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:buildings' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var naturalLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:natural' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var natural_aLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:natural_a' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var placesLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:places' }, //название чего-то
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: true // Изначально открыт
+            });
+
+            var places_aLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:places_a' }, //территория области
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: true // Изначально открыт
+            });
+
+            var pofwLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                        params: { 'LAYERS': 'ne:pofw' },
+                        serverType: 'geoserver',
+                        crossOrigin: 'anonymous'
+                    }),
+            visible: false // Изначально скрыт
+            });
+
+            var pofw_aLayer = new ol.layer.Image({ 
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:pofw_a' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+    
+            var poisLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:pois' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var pois_aLayer = new ol.layer.Image({
+               source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:pois_a' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var railwaysLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:railways' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var roadsLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                params: { 'LAYERS': 'ne:roads' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: true // Изначально открыт
+            });
+
+            var water_aLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:water_a' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: true // Изначально открыт
+            });
+
+            var waterwaysLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:waterways' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var trafficLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:traffic' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var traffic_aLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:traffic_a' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var transportLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:transport' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+            var transport_aLayer = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/wms',
+                    params: { 'LAYERS': 'ne:transport_a' },
+                    serverType: 'geoserver',
+                    crossOrigin: 'anonymous'
+                }),
+            visible: false // Изначально скрыт
+            });
+
+
+            const allLayers = [
+                places_aLayer,//территория административной области
+                landuseLayer,//территория области парка, леса, завода и тд
+                water_aLayer,//водные территории(озера, водохранилища и тд)
+                waterwaysLayer,//реки и ручьи
+                natural_aLayer,//в основном территория пляжей
+                pois_aLayer, //сомнительно по расстановке//территория точек интереса
+                transport_aLayer,//территориальные парковки, аэродромы, остановки, вокзалы
+                traffic_aLayer,//территория парковок, пирсов и тд
+                buildingsLayer,//строения здания по периметру
+                pofw_aLayer, //территория духовная
+                railwaysLayer, //ж/д пути
+                roadsLayer, //дороги
+                transportLayer,//остановки, станции метро и тд
+                pofwLayer,//объект духовный
+                naturalLayer,//объекты природы(деревья и тд)
+                poisLayer,//точки интереса
+                trafficLayer,//дорожные объекты(заправки, парковки, перекрестки, светофоры и тд)
+                placesLayer // самый видный //административные названия(области, города, поселки и тд)
+            ]
+
+
+
+            // Создаем карту и добавляем слои
+            const map = new ol.Map({
+                target: 'map',
+                layers: [
+                    ...allLayers
+                ],
+                
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([37.6173, 55.7558]), // Координаты для Москвы
+                    zoom: 7
+                })
+            });
+
+
+            const zoomInfo = document.getElementById('zoom-info');
+
+
+            // Обрабатываем изменение уровня масштабирования, последовтельность загрузки слоев
+            map.getView().on('change:resolution', function() {
+                const zoom = map.getView().getZoom().toFixed(2);//Math.round()///toFixed(2)
+                zoomInfo.textContent = `Зум: ${zoom}`;
+                traffic_aLayer.setVisible(zoom>13);
+                trafficLayer.setVisible(zoom>13);
+                transport_aLayer.setVisible(zoom>13);
+                transportLayer.setVisible(zoom>13);
+                natural_aLayer.setVisible(zoom>13);
+                pois_aLayer.setVisible(zoom>13);
+                poisLayer.setVisible(zoom>13);
+                buildingsLayer.setVisible(zoom>12);
+                pofwLayer.setVisible(zoom>12);
+                pofw_aLayer.setVisible(zoom>12);
+                railwaysLayer.setVisible(zoom>12);
+                waterwaysLayer.setVisible(zoom>9);
+            
+            });
+
+
+
+
+            const infoContainer = document.getElementById('info-container');
+            const infoLayers = [buildingsLayer, natural_aLayer, placesLayer, pofwLayer, pofw_aLayer, poisLayer, pois_aLayer, railwaysLayer, roadsLayer, trafficLayer, traffic_aLayer, transportLayer, transport_aLayer, water_aLayer, waterwaysLayer];
+
+            // Установка обработчика события клика
+
+            map.on('singleclick', function (evt) {
+                const coordinate = evt.coordinate;
+                const resolution = map.getView().getResolution();
+                const requests = [];
+
+                infoContainer.innerHTML = 'Загрузка информации…';
+
+                infoLayers.forEach(layer => {
+                    if (!layer.getVisible()) return;
+
+                    const url = layer.getSource().getFeatureInfoUrl(
+                        coordinate, resolution, 'EPSG:3857',
+                        { 'INFO_FORMAT': 'application/json' }
+                    );
+
+                    if (url) {
+                        requests.push(
+                            fetch(url)
+                                .then(res => res.ok ? res.json() : Promise.reject())
+                                .then(data => data.features || [])
+                                .catch(() => [])
+                        );
+                    }
+                });
+
+                Promise.all(requests).then(results => {
+                    const allFeatures = results.flat();
+
+                    if (!allFeatures.length) {
+                        infoContainer.innerHTML = 'Объекты не найдены.';
+                        return;
+                    }
+
+                    const listHtml = allFeatures.map((f, i) => {
+                        const name = f.properties.name || f.properties.id || `Объект ${i + 1}`;
+                        return `<li data-index="${i}">${name}</li>`;
+                    }).join('');
+
+                    infoContainer.innerHTML = `
+                        <p>Найдено объектов: ${allFeatures.length}</p>
+                        <ul>${listHtml}</ul>
+                        <div id="feature-details"></div>
+                    `;
+
+                    // Переменная для отслеживания открытой информации
+                    let featureDetailsOpen = false;
+                    let lastClickedFeatureIndex = null;
+
+                    document.querySelectorAll('#info-container li').forEach(li => {
+                        li.addEventListener('click', function () {
+                            const idx = parseInt(this.dataset.index);
+
+                            // Если информация для этого объекта уже открыта, скрыть её
+                            if (idx === lastClickedFeatureIndex && featureDetailsOpen) {
+                                document.getElementById('feature-details').innerHTML = '';
+                                featureDetailsOpen = false;
+                                lastClickedFeatureIndex = null; // Сбросить последний клик
+                                this.classList.remove('active'); // Убираем выделение
+                                return;
+                            }
+
+                            // Если это новый объект, показываем информацию
+                            const props = allFeatures[idx].properties;
+
+                            let html = '<p><b>Свойства объекта:</b></p><ul>';
+                            for (const key in props) {
+                                html += `<li><b>${key}</b>: ${props[key]}</li>`;
+                            }
+                            html += '</ul>';
+
+                            document.getElementById('feature-details').innerHTML = html;
+                            featureDetailsOpen = true;
+                            lastClickedFeatureIndex = idx; // Запоминаем индекс текущего объекта
+
+                            // Добавляем класс для выделения
+                            document.querySelectorAll('#info-container li').forEach(item => {
+                                item.classList.remove('active'); // Убираем выделение с других объектов
+                            });
+
+                            this.classList.add('active'); // Выделяем текущий элемент
+                        });
+                    });
+
+                    // Добавляем обработчик клика на контейнер с информацией, чтобы закрыть её
+                    document.getElementById('feature-details').addEventListener('click', function () {
+                        // Скрываем информацию, если она открыта
+                        if (featureDetailsOpen) {
+                            document.getElementById('feature-details').innerHTML = '';
+                            featureDetailsOpen = false;
+                            lastClickedFeatureIndex = null; // Сбросить последний клик
+                            document.querySelectorAll('#info-container li').forEach(item => {
+                                item.classList.remove('active'); // Убираем выделение
+                            });
+                        }
+                    });
+                });
+            });
+          
+
+        
+        });
+
+
+    </script>
+
+</body>

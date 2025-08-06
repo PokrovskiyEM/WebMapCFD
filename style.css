@@ -1,0 +1,146 @@
+/* Обнуляем отступы и границы для всех элементов */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Стиль для body */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+/* Заголовок */
+h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Контейнер карты */
+#mapContainer {
+    position: relative;
+    width: 80%;
+    max-width: 1600px;
+    height: 80vh;
+    max-height: 1000px;
+    background-color: white;
+    border: 2px solid #007bff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Карта */
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* Контейнер информации */
+#info-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 80%;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Стилизация списка объектов */
+#info-container ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#info-container li {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#info-container li:hover {
+    background-color: #eee;
+}
+
+/* Контейнер информации о зуме */
+#zoom-info {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 6px 10px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 1000;
+}
+
+/* Удаление кнопки поворота */
+.ol-rotate {
+    display: none !important;
+}
+
+/* Стилизация панели зума */
+.ol-zoom {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+/* Кнопки зума */
+.ol-zoom button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ol-zoom button:hover {
+    background-color: #0056b3;
+}
+
+/* Скрытие надписей от OpenLayers */
+.ol-attribution {
+    display: none !important;
+}
+
+#feature-details button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#feature-details button:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для выделенного элемента списка */
+#info-container li.active {
+    background-color: #007bff; /* Цвет фона выделенного элемента */
+    color: white; /* Белый текст */
+    font-weight: bold; /* Жирный шрифт */
+}
